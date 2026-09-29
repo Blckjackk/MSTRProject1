@@ -18,27 +18,24 @@ export default function DashboardLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ background: "var(--bg-base)" }}>
+    <div className="flex w-full min-h-screen" style={{ background: "var(--bg-base)" }}>
+      <div className="page-wrapper flex w-full">
+        <Sidebar
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
 
-      {/* ── Single sidebar instance ──────────────────────────
-          On desktop (lg): rendered as a static flex item.
-          On mobile: hidden by default, slides in as a drawer.
-      ────────────────────────────────────────────────────── */}
-      <Sidebar
-        isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-      />
-
-      {/* ── Main area ── */}
-      <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+        <div className="body-wrapper flex min-w-0 flex-1 flex-col">
         <Topbar
           onMenuClick={() => setSidebarOpen(true)}
           isConnected={isConnected}
           lastSync={lastSync}
         />
-        <main className="flex-1 overflow-y-auto">
-          {children}
-        </main>
+
+          <main className="dashboard-main flex-1 overflow-y-auto px-6 py-8 xl:px-8">
+            {children}
+          </main>
+        </div>
       </div>
     </div>
   );

@@ -29,7 +29,7 @@ export default function MetricCard({
 
   if (loading) {
     return (
-      <div className="card p-5 space-y-4">
+      <div className="card metric-card space-y-5">
         <div className="flex items-center justify-between">
           <div className="skeleton h-3 w-20 rounded" />
           <div className="skeleton h-8 w-8 rounded-lg" />
@@ -44,7 +44,7 @@ export default function MetricCard({
     trend === undefined ? null : trend > 0 ? "up" : trend < 0 ? "down" : "neutral";
 
   return (
-    <div className="card card-hover p-5" style={{ position: "relative", overflow: "hidden" }}>
+    <div className="card metric-card card-hover" style={{ position: "relative", overflow: "hidden" }}>
       {/* Accent line */}
       <div
         style={{
@@ -55,7 +55,7 @@ export default function MetricCard({
       />
 
       {/* Label row */}
-      <div className="flex items-center justify-between mb-4 pt-1">
+      <div className="flex items-center justify-between mb-5 pt-1">
         <p className="section-label">{label}</p>
         <div
           className="flex items-center justify-center rounded-lg"
@@ -66,7 +66,7 @@ export default function MetricCard({
       </div>
 
       {/* Value */}
-      <div className="flex items-baseline gap-1 mb-3">
+      <div className="flex items-baseline gap-1 mb-4">
         <span className="mono font-semibold" style={{ fontSize: 26, color: "var(--text-primary)", lineHeight: 1 }}>
           {value}
         </span>

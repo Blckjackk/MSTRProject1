@@ -4,12 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
-  Activity,
+  PlayCircle,
   BarChart2,
-  Cpu,
+  FlaskConical,
   LineChart,
   ServerCog,
-  Settings,
   Zap,
   X,
 } from "lucide-react";
@@ -24,15 +23,14 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Overview",          href: "/dashboard",           icon: LayoutDashboard, group: "Monitor" },
-  { label: "Real-Time Monitor", href: "/dashboard/realtime",  icon: Activity,        group: "Monitor" },
-  { label: "Energy History",    href: "/dashboard/history",   icon: BarChart2,       group: "Monitor" },
-  { label: "MSTR Cells",        href: "/dashboard/cells",     icon: Cpu,             group: "Monitor" },
-  { label: "Analytics",         href: "/dashboard/analytics", icon: LineChart,       group: "Analyze" },
+  { label: "Kontrol Sesi",      href: "/dashboard/sessions",  icon: PlayCircle,      group: "Monitor" },
+  { label: "Riwayat Sesi",      href: "/dashboard/history",   icon: BarChart2,       group: "Monitor" },
+  { label: "Substrat",          href: "/dashboard/cells",     icon: FlaskConical,    group: "Monitor" },
+  { label: "Perbandingan",      href: "/dashboard/analytics", icon: LineChart,       group: "Analyze" },
   { label: "System Status",     href: "/dashboard/status",    icon: ServerCog,       group: "Analyze" },
-  { label: "Settings",          href: "/dashboard/settings",  icon: Settings,        group: "System"  },
 ];
 
-const GROUPS = ["Monitor", "Analyze", "System"] as const;
+const GROUPS = ["Monitor", "Analyze"] as const;
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -47,7 +45,7 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       {/* Mobile overlay */}
       {isOpen && onClose && (
         <div
-          className="fixed inset-0 z-30 bg-black/20 lg:hidden"
+          className="fixed inset-0 z-30 bg-black/20 xl:hidden"
           onClick={onClose}
         />
       )}
@@ -60,31 +58,32 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
           flexShrink: 0,
         }}
         className={cn(
+          "green-sidebar",
           /* Mobile: fixed drawer, slides in/out */
           "fixed top-0 left-0 z-40 h-screen flex flex-col",
           "transition-transform duration-250 ease-in-out",
           isOpen ? "translate-x-0" : "-translate-x-full",
           /* Desktop: override to static, always visible */
-          "lg:relative lg:translate-x-0 lg:z-auto lg:flex"
+          "xl:relative xl:translate-x-0 xl:z-auto xl:flex"
         )}
       >
         {/* ── Logo ── */}
         <div
-          className="flex items-center justify-between px-4"
+          className="flex items-center justify-between px-6"
           style={{ height: "var(--topbar-h)", borderBottom: "1px solid var(--border)" }}
         >
           <div className="flex items-center gap-2.5">
             <div
               className="flex items-center justify-center rounded-lg"
-              style={{ width: 30, height: 30, background: "var(--emerald-600)", flexShrink: 0 }}
+              style={{ width: 38, height: 38, background: "#ffffff", color: "var(--emerald-700)", flexShrink: 0 }}
             >
-              <Zap size={14} color="#fff" strokeWidth={2.5} />
+              <Zap size={19} color="currentColor" strokeWidth={2.5} />
             </div>
             <div style={{ lineHeight: 1 }}>
-              <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
+              <p style={{ fontSize: 16, fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
                 MSTR
               </p>
-              <p style={{ fontSize: 10.5, color: "var(--text-muted)", marginTop: 2 }}>
+              <p style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 3 }}>
                 Energy Monitor
               </p>
             </div>
@@ -93,7 +92,7 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
           {onClose && (
             <button
               onClick={onClose}
-              className="lg:hidden p-1 rounded-md"
+              className="xl:hidden p-1 rounded-md"
               style={{ color: "var(--text-muted)" }}
               aria-label="Close sidebar"
             >

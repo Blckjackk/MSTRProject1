@@ -1,16 +1,10 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  LayoutDashboard,
-  PlayCircle,
-  BarChart2,
-  FlaskConical,
-  LineChart,
-  ServerCog,
-  Zap,
-  X,
+  LayoutDashboard, Activity, BarChart2, Cpu,
+  LineChart, ServerCog, Settings, Zap, X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -23,14 +17,15 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Overview",          href: "/dashboard",           icon: LayoutDashboard, group: "Monitor" },
-  { label: "Kontrol Sesi",      href: "/dashboard/sessions",  icon: PlayCircle,      group: "Monitor" },
-  { label: "Riwayat Sesi",      href: "/dashboard/history",   icon: BarChart2,       group: "Monitor" },
-  { label: "Substrat",          href: "/dashboard/cells",     icon: FlaskConical,    group: "Monitor" },
-  { label: "Perbandingan",      href: "/dashboard/analytics", icon: LineChart,       group: "Analyze" },
+  { label: "Real-Time Monitor", href: "/dashboard/realtime",  icon: Activity,        group: "Monitor" },
+  { label: "Energy History",    href: "/dashboard/history",   icon: BarChart2,       group: "Monitor" },
+  { label: "MSTR Cells",        href: "/dashboard/cells",     icon: Cpu,             group: "Monitor" },
+  { label: "Analytics",         href: "/dashboard/analytics", icon: LineChart,       group: "Analyze" },
   { label: "System Status",     href: "/dashboard/status",    icon: ServerCog,       group: "Analyze" },
+  { label: "Settings",          href: "/dashboard/settings",  icon: Settings,        group: "System"  },
 ];
 
-const GROUPS = ["Monitor", "Analyze"] as const;
+const GROUPS = ["Monitor", "Analyze", "System"] as const;
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -45,7 +40,8 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       {/* Mobile overlay */}
       {isOpen && onClose && (
         <div
-          className="fixed inset-0 z-30 bg-black/20 xl:hidden"
+          className="fixed inset-0 z-30 lg:hidden"
+          style={{ background: "rgba(12,18,34,0.25)", backdropFilter: "blur(2px)" }}
           onClick={onClose}
         />
       )}
@@ -53,37 +49,40 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       <aside
         style={{
           width: "var(--sidebar-w)",
-          borderRight: "1px solid var(--border)",
           background: "var(--bg-surface)",
+          borderRight: "1px solid var(--border)",
+          boxShadow: "2px 0 12px rgba(12,18,34,0.04)",
           flexShrink: 0,
         }}
         className={cn(
-          "green-sidebar",
-          /* Mobile: fixed drawer, slides in/out */
           "fixed top-0 left-0 z-40 h-screen flex flex-col",
           "transition-transform duration-250 ease-in-out",
           isOpen ? "translate-x-0" : "-translate-x-full",
-          /* Desktop: override to static, always visible */
-          "xl:relative xl:translate-x-0 xl:z-auto xl:flex"
+          "lg:relative lg:translate-x-0 lg:z-auto lg:flex"
         )}
       >
         {/* ── Logo ── */}
         <div
-          className="flex items-center justify-between px-6"
+          className="flex items-center justify-between px-4"
           style={{ height: "var(--topbar-h)", borderBottom: "1px solid var(--border)" }}
         >
           <div className="flex items-center gap-2.5">
             <div
-              className="flex items-center justify-center rounded-lg"
-              style={{ width: 38, height: 38, background: "#ffffff", color: "var(--emerald-700)", flexShrink: 0 }}
+              className="flex items-center justify-center rounded-xl"
+              style={{
+                width: 32, height: 32,
+                background: "linear-gradient(135deg, var(--emerald-500), var(--emerald-700))",
+                boxShadow: "0 2px 8px rgba(5,150,105,0.30)",
+                flexShrink: 0,
+              }}
             >
-              <Zap size={19} color="currentColor" strokeWidth={2.5} />
+              <Zap size={14} color="#fff" strokeWidth={2.5} />
             </div>
             <div style={{ lineHeight: 1 }}>
-              <p style={{ fontSize: 16, fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
+              <p style={{ fontSize: 14, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
                 MSTR
               </p>
-              <p style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 3 }}>
+              <p style={{ fontSize: 10.5, color: "var(--text-muted)", marginTop: 2 }}>
                 Energy Monitor
               </p>
             </div>
@@ -92,27 +91,24 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
           {onClose && (
             <button
               onClick={onClose}
-              className="xl:hidden p-1 rounded-md"
-              style={{ color: "var(--text-muted)" }}
+              className="icon-btn lg:hidden"
               aria-label="Close sidebar"
             >
-              <X size={16} />
+              <X size={15} />
             </button>
           )}
         </div>
 
         {/* ── Navigation ── */}
-        <nav className="flex-1 overflow-y-auto px-3 py-4">
+        <nav className="flex-1 overflow-y-auto px-3 py-5">
           {GROUPS.map((group) => {
             const items = NAV_ITEMS.filter((n) => n.group === group);
             return (
-              <div key={group} className="mb-5">
-                <p
-                  className="section-label px-2 mb-1.5"
-                >
+              <div key={group} className="mb-6">
+                <p className="section-label px-2 mb-2">
                   {group}
                 </p>
-                <div className="space-y-0.5">
+                <div className="space-y-0.5" style={{ paddingLeft: 13 }}>
                   {items.map((item) => {
                     const isActive =
                       item.href === "/dashboard"
@@ -141,18 +137,18 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
         </nav>
 
         {/* ── Footer status ── */}
-        <div
-          className="px-3 py-3"
-          style={{ borderTop: "1px solid var(--border)" }}
-        >
-          <div className="flex items-center gap-2 px-2 py-2">
+        <div className="px-3 py-3" style={{ borderTop: "1px solid var(--border)" }}>
+          <div
+            className="flex items-center gap-2 px-2 py-2 rounded-xl"
+            style={{ background: "var(--emerald-50)" }}
+          >
             <div className="live-dot" />
-            <p style={{ fontSize: 12, color: "var(--text-secondary)", fontWeight: 500 }}>
+            <p style={{ fontSize: 12, color: "var(--emerald-700)", fontWeight: 600 }}>
               System Active
             </p>
             <span
               className="ml-auto mono"
-              style={{ fontSize: 11, color: "var(--text-muted)" }}
+              style={{ fontSize: 11, color: "var(--emerald-600)", fontWeight: 500 }}
             >
               4 cells
             </span>

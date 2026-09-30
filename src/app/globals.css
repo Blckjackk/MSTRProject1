@@ -86,9 +86,20 @@ html {
 
 body {
   font-family: "Inter", system-ui, sans-serif;
-  background: var(--bg-base);
+  background: linear-gradient(180deg, #f8fafc 0%, var(--bg-base) 34%, var(--bg-base) 100%);
   color: var(--text-primary);
   line-height: 1.6;
+}
+
+.dashboard-main {
+  padding: 24px;
+  background: transparent;
+}
+
+@media (max-width: 640px) {
+  .dashboard-main {
+    padding: 16px;
+  }
 }
 
 /* ── Scrollbar ─────────────────────────────────────────── */
@@ -104,6 +115,210 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
+  padding: 24px;
+}
+
+.card.overflow-hidden,
+.card.overflow-x-auto {
+  padding: 0;
+}
+
+.card table {
+  border-collapse: separate !important;
+  border-spacing: 0;
+}
+
+.card thead tr {
+  background: var(--emerald-700) !important;
+}
+
+.card thead th {
+  padding: 14px 20px !important;
+  color: #ffffff !important;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--emerald-600);
+}
+
+.card tbody td {
+  padding: 14px 20px !important;
+}
+
+.session-page .card {
+  background: linear-gradient(135deg, var(--bg-surface), var(--emerald-50));
+  border-color: var(--emerald-100);
+}
+
+.substrate-field {
+  display: block;
+  width: 100%;
+  height: 44px;
+  margin-top: 8px;
+}
+
+.substrate-page form > div.grid > label:nth-child(1) input,
+.substrate-page form > div.grid > label:nth-child(2) input,
+.substrate-page form > div.grid > label:nth-child(3) textarea {
+  display: block;
+  width: 100%;
+  height: 44px;
+  margin-top: 8px;
+  padding-inline: 12px;
+  resize: none;
+}
+.dashboard-shell {
+  width: min(100%, 1280px);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.page-shell {
+  width: min(100%, 1280px);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.max-w-screen-xl.mx-auto {
+  width: min(100%, 1280px);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.green-sidebar {
+  background: var(--emerald-700) !important;
+  border-color: var(--emerald-600) !important;
+  color: #ffffff;
+}
+
+.green-sidebar > div:first-child {
+  padding-inline: 28px !important;
+}
+
+.green-sidebar nav {
+  padding: 24px 20px 20px !important;
+}
+
+.green-sidebar .sidebar-nav-item {
+  padding: 10px 14px;
+  gap: 12px;
+  font-size: 15px;
+}
+
+.green-sidebar .section-label {
+  padding-inline: 14px !important;
+  font-size: 11px;
+}
+
+.green-sidebar .section-label,
+.green-sidebar p,
+.green-sidebar button {
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.green-sidebar .sidebar-nav-item {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.green-sidebar .sidebar-nav-item:hover,
+.green-sidebar .sidebar-nav-item.active {
+  background: var(--emerald-500);
+  color: #ffffff;
+}
+
+.green-header {
+  background: var(--emerald-700) !important;
+  border-color: var(--emerald-600) !important;
+  color: #ffffff;
+}
+
+.green-header button,
+.green-header span,
+.green-header svg {
+  color: #ffffff !important;
+}
+
+.dashboard-shell h1,
+.page-shell h1,
+.max-w-screen-xl.mx-auto h1 {
+  color: var(--emerald-700) !important;
+}
+
+.green-header {
+  padding-inline: 48px !important;
+}
+
+.green-header .mono,
+.green-header span {
+  font-size: 12px !important;
+}
+
+.green-header button {
+  padding: 8px;
+}
+
+.dashboard-main button:not([aria-label]):not([title]),
+.dashboard-main a.inline-flex:not([title]) {
+  min-height: 40px;
+  padding-inline: 18px;
+  padding-block: 10px;
+}
+
+.dashboard-main .card {
+  box-shadow: var(--shadow-md);
+}
+
+.metric-card {
+  min-height: 142px;
+  padding: 24px;
+}
+
+@media (max-width: 640px) {
+  .dashboard-shell,
+  .page-shell,
+  .max-w-screen-xl.mx-auto {
+    gap: 24px;
+  }
+
+  .metric-card {
+    min-height: 132px;
+    padding: 20px;
+  }
+
+  .green-header {
+    padding-inline: 20px !important;
+  }
+
+  .green-sidebar > div:first-child {
+    padding-inline: 24px !important;
+  }
+
+  .green-sidebar nav {
+    padding: 20px 16px 16px !important;
+  }
+}
+
+.empty-panel {
+  border: 1px dashed var(--border-strong);
+  background: linear-gradient(135deg, var(--bg-surface), #f8fafc);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--emerald-700);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .card-hover {

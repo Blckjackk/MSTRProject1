@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Bell, Menu, Wifi, WifiOff } from "lucide-react";
 
 interface TopbarProps {
@@ -10,22 +9,17 @@ interface TopbarProps {
 }
 
 export default function Topbar({ onMenuClick, isConnected = true, lastSync }: TopbarProps) {
-  const [syncTime, setSyncTime] = useState("—");
-
-  useEffect(() => {
-    const fmt = (iso: string) =>
-      new Date(iso).toLocaleTimeString("en-GB", {
+  const syncTime = lastSync
+    ? new Date(lastSync).toLocaleTimeString("en-GB", {
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
-      });
-
-    setSyncTime(lastSync ? fmt(lastSync) : fmt(new Date().toISOString()));
-  }, [lastSync]);
+      })
+    : "—";
 
   return (
     <header
-      className="flex items-center justify-between px-5 sticky top-0 z-20"
+      className="green-header flex items-center justify-between px-8 sticky top-0 z-20"
       style={{
         height: "var(--topbar-h)",
         background: "var(--bg-surface)",
@@ -35,17 +29,17 @@ export default function Topbar({ onMenuClick, isConnected = true, lastSync }: To
       {/* Left */}
       <div className="flex items-center gap-3">
         <button
-          className="lg:hidden p-1.5 rounded-md"
+          className="xl:hidden p-2 rounded-md"
           style={{ color: "var(--text-muted)" }}
           onClick={onMenuClick}
           aria-label="Open navigation"
         >
-          <Menu size={18} />
+          <Menu size={21} />
         </button>
 
         {/* Page breadcrumb hint — only visible on mobile where sidebar is hidden */}
         <span
-          className="lg:hidden font-semibold text-sm"
+          className="xl:hidden font-semibold text-base"
           style={{ color: "var(--text-primary)" }}
         >
           MSTR
@@ -92,7 +86,7 @@ export default function Topbar({ onMenuClick, isConnected = true, lastSync }: To
           style={{ color: "var(--text-muted)" }}
           aria-label="Notifications"
         >
-          <Bell size={16} />
+          <Bell size={19} />
           <span
             className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full"
             style={{ background: "var(--amber-500)" }}
@@ -103,8 +97,8 @@ export default function Topbar({ onMenuClick, isConnected = true, lastSync }: To
         <div
           className="flex items-center justify-center rounded-full text-xs font-bold select-none"
           style={{
-            width: 30,
-            height: 30,
+            width: 36,
+            height: 36,
             background: "var(--emerald-600)",
             color: "#fff",
             flexShrink: 0,

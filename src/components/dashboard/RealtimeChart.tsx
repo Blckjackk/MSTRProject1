@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   ResponsiveContainer,
   LineChart,
@@ -9,165 +8,98 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
 } from "recharts";
-import type { Measurement } from "@/lib/mock-data";
-import { formatTime } from "@/lib/utils";
-import { cn } from "@/lib/utils";
-
-type Tab = "voltage" | "current" | "power";
-
-interface ChartPoint {
-  time: string;
-  voltage: number;
-  current: number; // mA
-  power: number;   // mW
-}
+import type { Measurement } from "@/lib/data-models";
 
 interface RealtimeChartProps {
   history: Measurement[];
   loading?: boolean;
 }
 
-const TAB_CONFIG: Record<Tab, {
-  label: string;
-  dataKey: keyof ChartPoint;
-  unit: string;
-  color: string;
-  domain: [number | "auto", number | "auto"];
-}> = {
-  voltage: { label: "Voltage", dataKey: "voltage", unit: "V",  color: "var(--blue-500)",   domain: [0, 1.6] },
-  current: { label: "Current", dataKey: "current", unit: "mA", color: "var(--emerald-500)", domain: [0, 55]  },
-  power:   { label: "Power",   dataKey: "power",   unit: "mW", color: "var(--violet-500)", domain: [0, 80]  },
-};
+function formatElapsed(seconds: number): string {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const remainder = seconds % 60;
+  return hours > 0
+    ? `${hours}j ${String(minutes).padStart(2, "0")}m`
+    : `${minutes}m ${String(remainder).padStart(2, "0")}s`;
+}
 
-function CustomTooltip({ active, payload, label, unit }: {
-  active?: boolean;
-  payload?: { value: number }[];
-  label?: string;
-  unit: string;
-}) {
-  if (!active || !payload?.length) return null;
+function EmptyChart() {
   return (
-    <div className="card px-3 py-2" style={{ minWidth: 110, boxShadow: "var(--shadow-md)" }}>
-      <p style={{ fontSize: 11, color: "var(--text-muted)" }}>{label}</p>
-      <p className="mono font-semibold" style={{ fontSize: 13, color: "var(--text-primary)", marginTop: 2 }}>
-        {payload[0].value.toFixed(3)}{" "}
-        <span style={{ fontSize: 11, fontWeight: 400, color: "var(--text-muted)" }}>{unit}</span>
-      </p>
+    <div className="flex h-full items-center justify-center text-center" style={{ color: "var(--text-muted)", fontSize: 13 }}>
+      Belum ada pembacaan untuk sesi aktif.
     </div>
   );
 }
 
 export default function RealtimeChart({ history, loading = false }: RealtimeChartProps) {
-  const [activeTab, setActiveTab] = useState<Tab>("voltage");
-  const cfg = TAB_CONFIG[activeTab];
-
-  const data: ChartPoint[] = history.map((m) => ({
-    time:    formatTime(m.timestamp),
-    voltage: m.voltage,
-    current: parseFloat((m.current * 1000).toFixed(3)),
-    power:   parseFloat((m.power   * 1000).toFixed(3)),
+  const data = history.map((measurement) => ({
+    elapsed: measurement.elapsedSeconds ?? 0,
+    voltage: measurement.voltage,
+    current: measurement.current * 1000,
+    power: measurement.power * 1000,
   }));
 
-  if (loading) {
-    return (
-      <div className="card p-5">
-        <div className="skeleton h-4 w-48 rounded mb-5" />
-        <div className="skeleton w-full rounded-lg" style={{ height: 240 }} />
-      </div>
-    );
-  }
-
-  const lastReading = data.length > 0 ? data[data.length - 1].time : "—";
-
   return (
-    <div className="card p-5">
-      {/* ── Header ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="card-title">Real-Time Output</span>
-            <div
-              className="flex items-center gap-1.5 px-2 py-0.5 rounded-full"
-              style={{ background: "var(--emerald-50)", border: "1px solid var(--emerald-100)" }}
-            >
-              <div className="live-dot" />
-              <span style={{ fontSize: 10, fontWeight: 600, color: "var(--emerald-600)", letterSpacing: "0.06em" }}>
-                LIVE
-              </span>
-            </div>
-          </div>
-          <p className="card-subtitle mt-1">
-            Last reading: <span className="mono">{lastReading}</span>
-            &nbsp;·&nbsp;2 s interval
-          </p>
+    <div className="card p-6 sm:p-7">
+      <div className="flex flex-col gap-1 mb-6">
+        <div className="flex items-center gap-2">
+          <span className="card-title">Real-Time Output</span>
+          <span className="section-label" style={{ color: "var(--text-muted)" }}>V / I / P</span>
         </div>
-
-        {/* ── Tabs ── */}
-        <div
-          className="flex rounded-lg p-0.5 gap-0.5"
-          style={{ background: "var(--bg-subtle)", border: "1px solid var(--border)" }}
-        >
-          {(Object.keys(TAB_CONFIG) as Tab[]).map((tab) => {
-            const active = tab === activeTab;
-            return (
-              <button
-                key={tab}
-                className="px-3 py-1 rounded-md text-xs font-medium transition-all"
-                style={
-                  active
-                    ? { background: "var(--bg-surface)", color: TAB_CONFIG[tab].color, boxShadow: "var(--shadow-sm)", fontWeight: 600 }
-                    : { color: "var(--text-muted)" }
-                }
-                onClick={() => setActiveTab(tab)}
-              >
-                {TAB_CONFIG[tab].label}
-              </button>
-            );
-          })}
-        </div>
+        <p className="card-subtitle">Waktu berjalan sesi, bukan waktu jam dinding</p>
       </div>
 
-      {/* ── Chart ── */}
-      <div style={{ height: 240 }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: -14 }}>
-            <CartesianGrid strokeDasharray="3 4" stroke="var(--border)" vertical={false} />
-            <XAxis
-              dataKey="time"
-              tick={{ fontSize: 10, fill: "var(--text-muted)", fontFamily: "JetBrains Mono" }}
-              tickLine={false}
-              axisLine={false}
-              interval="preserveStartEnd"
-            />
-            <YAxis
-              domain={cfg.domain}
-              tick={{ fontSize: 10, fill: "var(--text-muted)", fontFamily: "JetBrains Mono" }}
-              tickLine={false}
-              axisLine={false}
-              width={42}
-            />
-            <Tooltip
-              content={<CustomTooltip unit={cfg.unit} />}
-              cursor={{ stroke: "var(--border-strong)", strokeWidth: 1, strokeDasharray: "3 3" }}
-            />
-            <Line
-              type="monotone"
-              dataKey={cfg.dataKey as string}
-              stroke={cfg.color}
-              strokeWidth={1.75}
-              dot={false}
-              activeDot={{ r: 3.5, fill: cfg.color, strokeWidth: 0 }}
-              isAnimationActive={false}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+      <div style={{ height: 260 }}>
+        {loading ? (
+          <div className="skeleton w-full rounded-lg" style={{ height: "100%" }} />
+        ) : data.length === 0 ? (
+          <EmptyChart />
+        ) : (
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data} margin={{ top: 4, right: 8, bottom: 0, left: 0 }}>
+              <CartesianGrid strokeDasharray="3 4" stroke="var(--border)" vertical={false} />
+              <XAxis
+                dataKey="elapsed"
+                tickFormatter={formatElapsed}
+                tick={{ fontSize: 10, fill: "var(--text-muted)", fontFamily: "JetBrains Mono" }}
+                tickLine={false}
+                axisLine={false}
+                label={{ value: "Elapsed time", position: "insideBottom", offset: -2, fontSize: 10, fill: "var(--text-muted)" }}
+              />
+              <YAxis
+                yAxisId="voltage"
+                orientation="left"
+                domain={[0, "auto"]}
+                tick={{ fontSize: 10, fill: "var(--blue-600)", fontFamily: "JetBrains Mono" }}
+                tickLine={false}
+                axisLine={false}
+                width={38}
+              />
+              <YAxis
+                yAxisId="current-power"
+                orientation="right"
+                domain={[0, "auto"]}
+                tick={{ fontSize: 10, fill: "var(--text-muted)", fontFamily: "JetBrains Mono" }}
+                tickLine={false}
+                axisLine={false}
+                width={42}
+              />
+              <Tooltip
+                labelFormatter={(value) => formatElapsed(Number(value))}
+                formatter={(value, name) => [Number(value).toFixed(2), name === "voltage" ? "V" : name === "current" ? "mA" : "mW"]}
+                contentStyle={{ border: "1px solid var(--border)", borderRadius: 8, background: "var(--bg-surface)" }}
+              />
+              <Legend wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />
+              <Line yAxisId="voltage" type="monotone" dataKey="voltage" name="Tegangan (V)" stroke="var(--blue-500)" strokeWidth={1.8} dot={false} isAnimationActive={false} />
+              <Line yAxisId="current-power" type="monotone" dataKey="current" name="Arus (mA)" stroke="var(--emerald-500)" strokeWidth={1.8} dot={false} isAnimationActive={false} />
+              <Line yAxisId="current-power" type="monotone" dataKey="power" name="Daya (mW)" stroke="var(--violet-500)" strokeWidth={1.8} dot={false} isAnimationActive={false} />
+            </LineChart>
+          </ResponsiveContainer>
+        )}
       </div>
-
-      {/* ── Footer label ── */}
-      <p className="text-right" style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 6 }}>
-        {cfg.label} ({cfg.unit})
-      </p>
     </div>
   );
 }

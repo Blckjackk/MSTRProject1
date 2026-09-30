@@ -2,7 +2,7 @@
 
 export default function SettingsPage() {
   return (
-    <div className="p-6 space-y-6 max-w-screen-xl mx-auto">
+    <div className="page-shell">
       <div>
         <h1 className="font-semibold text-xl" style={{ color: "var(--text-primary)" }}>
           Settings

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import { Bell, Menu, Wifi, WifiOff, ChevronRight } from "lucide-react";

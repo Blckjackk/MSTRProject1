@@ -1,6 +1,6 @@
-﻿"use client";
+"use client";
 
-import type { Alert } from "@/lib/mock-data";
+import type { Alert } from "@/lib/data-models";
 import { AlertTriangle, Info, XOctagon, Bell } from "lucide-react";
 
 interface AlertPanelProps {
@@ -82,7 +82,7 @@ export default function AlertPanel({ alerts, loading = false }: AlertPanelProps)
           </div>
         ) : (
           alerts.map((alert) => {
-            const st = TYPE[alert.type];
+            const st = TYPE[alert.type as keyof typeof TYPE];
             const Icon = st.icon;
             return (
               <div

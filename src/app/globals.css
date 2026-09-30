@@ -1,4 +1,3 @@
-﻿@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..700;1,14..32,300..700&family=JetBrains+Mono:wght@400;500&display=swap");
 @import "tailwindcss";
 
 /* ==========================================================
@@ -74,13 +73,8 @@
   --radius-xl: 18px;
 }
 
-/* ── Reset ─────────────────────────────────────────────── */
-
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* Reset */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
   -webkit-font-smoothing: antialiased;
@@ -95,21 +89,18 @@ body {
   line-height: 1.6;
 }
 
-/* ── Scrollbar ─────────────────────────────────────────── */
-
+/* Scrollbar */
 ::-webkit-scrollbar        { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track  { background: transparent; }
 ::-webkit-scrollbar-thumb  { background: var(--border-strong); border-radius: 999px; }
 
-/* ── Card ──────────────────────────────────────────────── */
-
+/* Card */
 .card {
   background: var(--bg-surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
 }
-
 .card-hover {
   transition: box-shadow 0.22s cubic-bezier(0.4,0,0.2,1),
               transform  0.22s cubic-bezier(0.4,0,0.2,1);
@@ -119,13 +110,11 @@ body {
   transform: translateY(-2px);
 }
 
-/* ── Typography ────────────────────────────────────────── */
-
+/* Typography */
 .mono {
   font-family: "JetBrains Mono", monospace;
   font-feature-settings: "tnum";
 }
-
 .section-label {
   font-size: 10px;
   font-weight: 600;
@@ -133,7 +122,6 @@ body {
   text-transform: uppercase;
   color: var(--text-muted);
 }
-
 .page-title {
   font-size: 19px;
   font-weight: 700;
@@ -141,29 +129,25 @@ body {
   letter-spacing: -0.025em;
   line-height: 1.3;
 }
-
 .page-subtitle {
   font-size: 13px;
   color: var(--text-muted);
   margin-top: 3px;
   line-height: 1.5;
 }
-
 .card-title {
   font-size: 13px;
   font-weight: 600;
   color: var(--text-primary);
   letter-spacing: -0.01em;
 }
-
 .card-subtitle {
   font-size: 11px;
   color: var(--text-muted);
   margin-top: 1px;
 }
 
-/* ── Sidebar Nav ───────────────────────────────────────── */
-
+/* Sidebar Nav */
 .sidebar-nav-item {
   display: flex;
   align-items: center;
@@ -180,18 +164,15 @@ body {
   line-height: 1;
   position: relative;
 }
-
 .sidebar-nav-item:hover {
   background: var(--bg-subtle);
   color: var(--text-primary);
 }
-
 .sidebar-nav-item.active {
   background: var(--emerald-50);
   color: var(--emerald-700);
   font-weight: 600;
 }
-
 .sidebar-nav-item.active::before {
   content: "";
   position: absolute;
@@ -204,23 +185,19 @@ body {
   background: var(--emerald-500);
 }
 
-/* ── Badges ────────────────────────────────────────────── */
-
+/* Badges */
 .badge-normal   { background: var(--emerald-50); color: var(--emerald-700); }
 .badge-warning  { background: var(--amber-50);   color: var(--amber-600); }
 .badge-critical { background: var(--red-50);      color: var(--red-600); }
-
 .trend-up      { color: var(--emerald-600); background: var(--emerald-50); }
 .trend-down    { color: var(--red-600);     background: var(--red-50); }
 .trend-neutral { color: var(--text-secondary); background: var(--bg-subtle); }
 
-/* ── Live Dot Pulse ────────────────────────────────────── */
-
+/* Live Dot */
 @keyframes live-pulse {
-  0%, 100% { opacity: 1;    transform: scale(1); }
-  50%       { opacity: 0.4;  transform: scale(0.75); }
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.75); }
 }
-
 .live-dot {
   width: 6px;
   height: 6px;
@@ -231,13 +208,11 @@ body {
   box-shadow: 0 0 0 2px rgba(16,185,129,0.18);
 }
 
-/* ── Skeleton ──────────────────────────────────────────── */
-
+/* Skeleton */
 @keyframes shimmer {
   0%   { background-position: -600px 0; }
   100% { background-position:  600px 0; }
 }
-
 .skeleton {
   background: linear-gradient(
     90deg,
@@ -250,24 +225,17 @@ body {
   border-radius: var(--radius-sm);
 }
 
-/* ── Divider ───────────────────────────────────────────── */
+/* Divider */
+.divider { height: 1px; background: var(--border); width: 100%; }
 
-.divider {
-  height: 1px;
-  background: var(--border);
-  width: 100%;
-}
-
-/* ── Topbar glassmorphism ──────────────────────────────── */
-
+/* Topbar glass */
 .topbar-glass {
   background: rgba(255,255,255,0.88);
   backdrop-filter: blur(14px) saturate(180%);
   -webkit-backdrop-filter: blur(14px) saturate(180%);
 }
 
-/* ── Icon button ───────────────────────────────────────── */
-
+/* Icon button */
 .icon-btn {
   display: inline-flex;
   align-items: center;
@@ -280,14 +248,12 @@ body {
   border: none;
   background: none;
 }
-
 .icon-btn:hover {
   background: var(--bg-subtle);
   color: var(--text-secondary);
 }
 
-/* ── Focus ring ────────────────────────────────────────── */
-
+/* Focus ring */
 button:focus-visible,
 a:focus-visible {
   outline: 2px solid var(--emerald-500);

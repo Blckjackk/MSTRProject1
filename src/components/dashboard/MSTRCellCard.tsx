@@ -1,6 +1,6 @@
-﻿"use client";
+"use client";
 
-import type { MSTRCell } from "@/lib/mock-data";
+import type { MSTRCell } from "@/lib/data-models";
 import { formatVoltage, formatCurrentMA, formatPowerMW } from "@/lib/utils";
 
 interface MSTRCellCardProps { cell: MSTRCell; }
@@ -48,7 +48,7 @@ function MetricRow({ label, value, color }: { label: string; value: string; colo
 }
 
 export default function MSTRCellCard({ cell }: MSTRCellCardProps) {
-  const st = STATUS[cell.status];
+  const st = STATUS[cell.status as keyof typeof STATUS];
 
   return (
     <div className="card card-hover p-4 flex flex-col gap-3.5" style={{ position: "relative", overflow: "hidden" }}>
